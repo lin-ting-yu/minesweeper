@@ -1,0 +1,219 @@
+{
+  "version": 1,
+  "projects": {
+    "library-pack-test": {
+      "projectType": "application",
+      "root": "apps/library-pack-test",
+      "sourceRoot": "apps/library-pack-test/src",
+      "prefix": "library-pack-test",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/library-pack-test",
+            "index": "apps/library-pack-test/src/index.html",
+            "main": "apps/library-pack-test/src/main.ts",
+            "polyfills": "apps/library-pack-test/src/polyfills.ts",
+            "tsConfig": "apps/library-pack-test/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "apps/library-pack-test/src/favicon.ico",
+              "apps/library-pack-test/src/assets"
+            ],
+            "styles": ["apps/library-pack-test/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/library-pack-test/src/environments/environment.ts",
+                  "with": "apps/library-pack-test/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "library-pack-test:build:production"
+            },
+            "development": {
+              "browserTarget": "library-pack-test:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "library-pack-test:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/library-pack-test/src/**/*.ts",
+              "apps/library-pack-test/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/library-pack-test"],
+          "options": {
+            "jestConfig": "apps/library-pack-test/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "library-pack-test-e2e": {
+      "root": "apps/library-pack-test-e2e",
+      "sourceRoot": "apps/library-pack-test-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/library-pack-test-e2e/cypress.json",
+            "devServerTarget": "library-pack-test:serve:development",
+            "tsConfig": "apps/library-pack-test-e2e/tsconfig.json"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "library-pack-test:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/library-pack-test-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
+    "magic-box": {
+      "projectType": "library",
+      "root": "libs/magic-box",
+      "sourceRoot": "libs/magic-box/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/magic-box/tsconfig.lib.json",
+            "project": "libs/magic-box/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/magic-box/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/magic-box"],
+          "options": {
+            "jestConfig": "libs/magic-box/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/magic-box/src/**/*.ts",
+              "libs/magic-box/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "minesweeper": {
+      "projectType": "library",
+      "root": "libs/minesweeper",
+      "sourceRoot": "libs/minesweeper/src",
+      "prefix": "library-pack-test",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/minesweeper"],
+          "options": {
+            "jestConfig": "libs/minesweeper/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/minesweeper/src/**/*.ts",
+              "libs/minesweeper/src/**/*.html"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular",
+    "packageManager": "npm"
+  },
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
+  },
+  "defaultProject": "library-pack-test"
+}

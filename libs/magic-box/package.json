@@ -1,0 +1,13 @@
+{
+  "name": "@loui1/magic-box",
+  "version": "2.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "peerDependencies": {
+    "@angular/common": "^11.0.9",
+    "@angular/core": "^11.0.9",
+    "dayjs": "^1.10.7"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}

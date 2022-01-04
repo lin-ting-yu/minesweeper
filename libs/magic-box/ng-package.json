@@ -1,0 +1,12 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "./public-pack",
+  "lib": {
+    "entryFile": "src/index.ts"
+  },
+  "allowedNonPeerDependencies": [
+    "dayjs"
+  ]
+}
+
+

@@ -1,0 +1,88 @@
+<div class="header">
+  <div class="icon"></div>
+  <div class="icon"></div>
+</div>
+<div
+  class="body"
+  [ngClass]="{
+    'is-done': isDone || isDead
+  }"
+>
+  <div class="dash">
+    <div class="number landmine" [attr.data-content]="landmineNum"></div>
+    <div class="face" (click)="restart()"></div>
+    <div class="number time" [attr.data-content]="time"></div>
+  </div>
+  <div class="lands">
+    <!-- <div class="row">
+      <div class="col is-open" data-content="1" ></div>
+      <div class="col is-open" data-content="2" ></div>
+      <div class="col is-open" data-content="3" ></div>
+      <div class="col is-open" data-content="4" ></div>
+      <div class="col is-open" data-content="5" ></div>
+      <div class="col is-open" data-content="6" ></div>
+      <div class="col is-open" data-content="7" ></div>
+      <div class="col is-open" data-content="8" ></div>
+    </div> -->
+    <!-- <div class="row">
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>
+      <div>4</div>
+      <div>5</div>
+      <div>6</div>
+      <div>7</div>
+      <div>8</div>
+    </div> -->
+    <div
+      *ngFor="let _y of minesweeperData.height; let yIndex = index;"
+      class="row"
+    >
+      <ng-container *ngFor="let _x of minesweeperData.width; let xIndex = index;">
+        <ng-container *ngTemplateOutlet="
+          land;
+          context: {
+            land: getLand(xIndex, yIndex),
+            index: xyToI(xIndex, yIndex),
+            x: xIndex,
+            y: yIndex
+          }
+        "></ng-container>
+
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+
+<ng-template
+  #land
+  let-land="land"
+  let-x="x"
+  let-y="y"
+  let-index="index"
+>
+  <div
+    class="col"
+    [attr.data-content]="
+      (land && land.isOpen && !land.isLandmine)
+        ? (
+          land && land.isOpen
+            ? (land.nearLandmineLength ? land.nearLandmineLength : '')
+            : ''
+        )
+        : ''
+    "
+    [ngClass]="{
+      'is-open': land.isOpen,
+      'is-landmine': land.isOpen && land.isLandmine,
+      'is-flag': land.isFlag,
+      'is-down': checkDown(x, y)
+    }"
+    (mousedown)="mousedown(x, y, $event)"
+    (mouseup)="mouseup(x, y, $event)"
+    (mouseenter)="mouseenter(x, y)"
+    (click)="itemClick(x, y, $event)"
+    (contextmenu)="false"
+  ></div>
+</ng-template>
