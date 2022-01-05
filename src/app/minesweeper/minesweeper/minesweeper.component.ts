@@ -2,14 +2,19 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
+  Input,
+  OnChanges,
   OnInit,
+  Output,
+  SimpleChanges,
 } from '@angular/core';
 import { Land, Minesweeper, OpenLandEnum } from '../data/minesweeper';
 
 enum Level {
-  Easy = 'easy',
-  Normal = 'normal',
-  Hard = 'hard',
+  Easy = 'Easy',
+  Normal = 'Normal',
+  Hard = 'Hard',
 }
 
 const minesweeperLevelData = {
@@ -30,20 +35,49 @@ const minesweeperLevelData = {
   },
 };
 
+const mouseupIntervalTime = 30
+
 @Component({
   selector: 'app-minesweeper',
   templateUrl: './minesweeper.component.html',
   styleUrls: ['./minesweeper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MinesweeperComponent implements OnInit {
+export class MinesweeperComponent implements OnInit, OnChanges {
   constructor(
     private cdRef: ChangeDetectorRef
   ) { }
 
-  private minesweeper: Minesweeper;
+  @Input() readonly level: Level = Level.Easy;
+  @Input() readonly isCollaspe = false;
 
-  private level: Level = Level.Easy;
+  @Input() readonly isShowSelect = true;
+  @Input() readonly isShowClose = true;
+  @Input() readonly isShowCollapse = true;
+
+  @Output() onSelectChange = new EventEmitter<Level>();
+  @Output() onCloseClick = new EventEmitter<void>();
+  @Output() onCollaspe = new EventEmitter<boolean>();
+
+
+  readonly options = Object.keys(Level).map(key => ({
+    value: key ,
+    text: Level[key as any as Level]
+  }));
+
+  private _innerLevel: Level;
+  set innerLevel(innerLevel) {
+    if (this._innerLevel !== innerLevel) {
+      this._innerLevel = innerLevel;
+      this.onSelectChange.emit(innerLevel);
+      this.init();
+    }
+  }
+  get innerLevel(): Level {
+    return this._innerLevel;
+  }
+
+  private minesweeper: Minesweeper;
   time = 0;
 
   private isStart = false;
@@ -52,14 +86,14 @@ export class MinesweeperComponent implements OnInit {
 
   isLeftDown = false;
   private isRightDown = false;
-  private leftDownIndex = -1;
+  // private leftDownIndex = -1;
   private rightDownIndex = -1;
 
   minesweeperData: {
     width: string[];
     height: string[];
     landmine: number;
-  } = minesweeperLevelData[this.level];
+  };
 
   private oldMouseupTimestamp = new Date().getTime();
   private mouseupIntervalTime = 10000;
@@ -68,14 +102,20 @@ export class MinesweeperComponent implements OnInit {
   private interval: NodeJS.Timeout;
 
   get landmineNum(): number {
-    const landmine = this.minesweeperData.landmine - this.minesweeper.flagLangth;
+    const landmine = (this.minesweeperData?.landmine || 0) - (this.minesweeper?.flagLangth || 0);
     return Math.min(Math.max(landmine, -99), 999);
   };
 
   ngOnInit(): void {
-    this.setMinesweeper();
+    this.innerLevel = this.level || Level.Easy;
+    this.init();
+  }
 
-    return;
+  ngOnChanges(changes: SimpleChanges): void {
+      if (changes.level) {
+        this.innerLevel = this.level || Level.Easy;
+        this.init();
+      }
   }
 
   itemClick(x: number, y: number, event: MouseEvent | PointerEvent): void {
@@ -85,13 +125,14 @@ export class MinesweeperComponent implements OnInit {
     if (this.isDone || this.isDead) {
       return;
     }
-    if (event.button === 0 && this.mouseupIntervalTime > 50 && !this.isRightDown) {
+    if (event.button === 0 && this.mouseupIntervalTime > mouseupIntervalTime && !this.isRightDown) {
       if (!this.isStart && this.landMatrix[this.xyToI(x, y)].isLandmine) {
         this.setMinesweeper(x, y);
       }
       this.startInterval();
       this.isStart = true;
       this.minesweeper.openLand(x, y, (res) => {
+
         if (res.type === OpenLandEnum.IsLandmine) {
           this.isDead = true;
           this.minesweeper.openAll();
@@ -104,7 +145,7 @@ export class MinesweeperComponent implements OnInit {
   mousedown(x: number, y: number, event: MouseEvent | PointerEvent): void {
     switch (event.button) {
       case 0:
-        this.leftDownIndex = this.xyToI(x, y);
+        // this.leftDownIndex = this.xyToI(x, y);
         this.isLeftDown = true;
         return;
       case 2:
@@ -126,18 +167,19 @@ export class MinesweeperComponent implements OnInit {
 
     if (event.button === 0 || event.button === 2) {
       if (event.button === 0) {
-        this.leftDownIndex = -1;
+        // this.leftDownIndex = -1;
         this.isLeftDown = false;
       } else {
         if (
           this.rightDownIndex === index &&
           !land.isOpen &&
           !this.isLeftDown &&
-          this.mouseupIntervalTime > 20
+          this.mouseupIntervalTime > mouseupIntervalTime
         ) {
           this.startInterval();
           this.isStart = true;
           this.minesweeper.setFlag(x, y);
+          this.cdRef.markForCheck();
         }
         this.rightDownIndex = -1;
         this.isRightDown = false;
@@ -146,7 +188,7 @@ export class MinesweeperComponent implements OnInit {
       if (
         land.isOpen &&
         !land.isFlag &&
-        (this.mouseupIntervalTime < 50 || this.isRightDown || this.isLeftDown)
+        (this.mouseupIntervalTime < mouseupIntervalTime || this.isRightDown || this.isLeftDown)
       ) {
         this.minesweeper.openNearLand(x, y, (res) => {
           if (res.type === OpenLandEnum.IsLandmine) {
@@ -188,10 +230,13 @@ export class MinesweeperComponent implements OnInit {
     );
   }
 
-  restart(): void {
+  init(): void {
+    this.minesweeperData = minesweeperLevelData[this.innerLevel];
     this.isStart = false;
     this.isDone = false;
     this.isDead = false;
+    this.isLeftDown = false;
+    this.isRightDown = false;
     this.time = 0;
     this.setMinesweeper();
     clearInterval(this.interval);
@@ -225,7 +270,7 @@ export class MinesweeperComponent implements OnInit {
         clearInterval(this.interval);
         return;
       }
-      this.time = Math.min(this.time + 1 , 999);
+      this.time = Math.min(this.time + 1, 999);
       this.cdRef.markForCheck();
     }, 1000);
   }

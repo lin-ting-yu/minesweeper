@@ -1,45 +1,146 @@
-$bg-color: #eee;
-$border-color: #999;
+@function grid($n) {
+  @return 4px * $n;
+}
+
 $border-size: 1px;
-$open-bg-color: #393939;
-$down-bg-color: #ccc;
+$color-black: #111111;
+$color-0: #3a3a3a;
+$color-1: #575757;
+$color-2: #eeeeee;
+$color-3: #f7f7f7;
+$color-4: #ffffff;
+
+$num-color-a: #0984e3;
+$num-color-b: #00b894;
+$num-color-c: #d63031;
+$num-color-d: #6c5ce7;
+$num-color-e: #e17055;
+$num-color-f: #74b9ff;
+$num-color-g: #dfe6e9;
+$num-color-h: #b2bec3;
+
+$face-size: grid(11);
+$number-size: grid(5);
+$number-spacing: 1px;
+$number-padding: grid(1.5);
+$mask-paddng: 2px;
 
 :host {
   display: flex;
-  font-family: 'Press Start 2P', cursive;
+  flex-direction: column;
+  align-items: stretch;
+  font-family: "Press Start 2P", cursive;
 }
+.minesweeper-header {
+  display: flex;
+  align-items: center;
+  height: grid(6);
+  border-radius: grid(2.5) grid(2.5) 0 0;
+  background-color: $color-0;
 
+  &:after {
+    content: '';
+    order: 2;
+    flex: 1;
+  }
+  .minesweeper-select,
+  .minesweeper-select-icon,
+  .minesweeper-icon {
+    height: grid(6);
+    padding: grid(1.5);
+  }
+  .minesweeper-select {
+    order: 1;
+    display: flex;
+    align-items: center;
+    max-width: 200px;
+    color: $color-4;
+    padding-left: grid(3);
+    padding-right: 0;
+    border-top-left-radius: grid(3);
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    &:hover {
+      background-color: $color-1;
+    }
+    &:active {
+      background-color: $color-black;
+    }
+    .minesweeper-select-text {
+      font-size: grid(3);
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .minesweeper-select-icon {
+      flex-shrink: 0;
+      padding-left: grid(0.5);
+    }
+    select {
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+  }
+  .minesweeper-select-icon,
+  .minesweeper-icon {
+    order: 3;
+    width: grid(6);
+    font-size: 0;
+    cursor: pointer;
+    svg {
+      width: 100%;
+      height: 100%;
+      fill: $color-4;
+    }
+  }
+  .minesweeper-icon {
+    &:last-child {
+      width: grid(8);
+      padding-right: grid(3);
+      border-top-right-radius: grid(3);
+    }
+    &:hover {
+      background-color: $color-1;
+    }
+    &:active {
+      background-color: $color-black;
+    }
+  }
+}
 .minesweeper-body {
-  border: solid ($border-size * 2) $border-color;
-  padding: 25px 10px 20px;
-  background-color: #ccc;
+  border: solid ($border-size * 2) $color-0;
+  border-top: none;
+  padding: grid(4.5);
+  background-color: $color-2;
+  border-radius: 0 0 grid(2.5) grid(2.5);
   &.minesweeper-is-done {
     .minesweeper-lands {
       pointer-events: none;
     }
   }
   .minesweeper-dash {
-    // border: solid ($border-size * 2) $border-color;
     display: flex;
     justify-content: space-between;
-    // padding: 8px;
-    margin-bottom: 15px;
+    margin-bottom: grid(4);
     .minesweeper-number,
-    .minesweeper-face{
-      border: solid ($border-size * 2) $border-color;
-      height: 40px;
-      background-color: $open-bg-color;
+    .minesweeper-face {
+      border: solid ($border-size * 2) $color-1;
+      height: $face-size;
+      background-color: $color-0;
+      border-radius: grid(2);
     }
     .minesweeper-number {
-      $number-size: 18px;
-      $number-spacing: 1px;
-      $number-padding: 10px;
-      $mask-paddng: 2px;
       width: $number-size * 3 + $number-spacing * 3 + $number-padding * 2 + $border-size * 4;
       font-size: $number-size;
       letter-spacing: $number-spacing;
       position: relative;
-      background-color: $open-bg-color;
+      background-color: $color-0;
       &::before,
       &::after {
         font: inherit;
@@ -50,13 +151,13 @@ $down-bg-color: #ccc;
         color: #eee;
       }
       &::before {
-        content: '000';
+        content: "000";
         right: $number-padding;
         opacity: 0.3;
       }
       &::after {
         content: attr(data-content);
-        background-color: $open-bg-color;
+        background-color: $color-0;
         padding: $mask-paddng;
         right: $number-padding - $mask-paddng;
       }
@@ -65,59 +166,98 @@ $down-bg-color: #ccc;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
+      width: $face-size;
       cursor: pointer;
+      position: relative;
+      &:hover {
+        background-color: $color-1;
+      }
+      &:active {
+        background-color: $color-black;
+      }
       svg {
-        width: 26px;
-        height: 26px;
-        fill: #ccc;
+        width: $face-size - grid(3);
+        height: $face-size - grid(3);
+        fill: $color-4;
+        position: relative;
+        z-index: 2;
       }
     }
   }
   .minesweeper-lands {
-    border: solid $border-size $border-color;
+    border-radius: 8px;
     .minesweeper-row {
       display: flex;
       align-items: center;
+      &:first-child {
+        .minesweeper-col {
+          border-top: solid $border-size * 2 $color-1;
+          &:first-child {
+            border-top-left-radius: grid(2);
+          }
+          &:last-child {
+            border-top-right-radius: grid(2);
+          }
+        }
+      }
+      &:last-child {
+        .minesweeper-col {
+          border-bottom: solid $border-size * 2 $color-1;
+          &:first-child {
+            border-bottom-left-radius: grid(2);
+          }
+          &:last-child {
+            border-bottom-right-radius: grid(2);
+          }
+        }
+      }
+      .minesweeper-col {
+        &:first-child {
+          border-left: solid $border-size * 2 $color-1;
+        }
+        &:last-child {
+          border-right: solid $border-size * 2 $color-1;
+        }
+      }
     }
     .minesweeper-col {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 25px;
-      height: 25px;
-      border: solid $border-size $border-color;
-      background-color: $bg-color;
+      width: grid(6);
+      height: grid(6);
+      border: solid $border-size $color-1;
+      background-color: $color-3;
       text-align: center;
       position: relative;
-      font-size: 12px;
+      font-size: grid(3);
       cursor: pointer;
-      &[data-content='1'] {
-        color: #0984e3;
+      &[data-content="1"] {
+        color: $num-color-a;
       }
-      &[data-content='2'] {
-        color: #00b894;
+      &[data-content="2"] {
+        color: $num-color-b;
       }
-      &[data-content='3'] {
-        color: #d63031;
+      &[data-content="3"] {
+        color: $num-color-c;
       }
-      &[data-content='4'] {
-        color: #6c5ce7;
+      &[data-content="4"] {
+        color: $num-color-d;
       }
-      &[data-content='5'] {
-        color: #e17055;
+      &[data-content="5"] {
+        color: $num-color-e;
       }
-      &[data-content='6'] {
-        color: #74b9ff;
+      &[data-content="6"] {
+        color: $num-color-f;
       }
-      &[data-content='7'] {
-        color: #dfe6e9;
+      &[data-content="7"] {
+        color: $num-color-g;
       }
-      &[data-content='8'] {
-        color: #b2bec3;
+      &[data-content="8"] {
+        color: $num-color-h;
       }
       &:hover {
-        background-color: $down-bg-color;
+        background-color: $color-2;
       }
       &::before,
       &::after {
@@ -128,43 +268,55 @@ $down-bg-color: #ccc;
         transform: translate(-50%, -50%);
       }
       &.minesweeper-is-down {
-        background-color: $down-bg-color;
+        background-color: $color-2;
       }
       &.minesweeper-is-open {
-        background-color: $open-bg-color;
+        background-color: $color-0;
         &::before {
           content: attr(data-content);
         }
       }
       &.minesweeper-is-landmine {
-        background-color: $bg-color;
-        &::after {
-          content: 'X';
-          color: #f24;
-          font-weight: bold;
-        }
+        background-color: $color-2;
+        &::after { content: ""; }
+        background-color: $num-color-c;
       }
       &.minesweeper-is-flag {
         color: transparent;
-        background-color: $bg-color;
+        background-color: $color-2;
         &::before {
-          content: 'F';
-          color: #159;
-          font-weight: bold;
+          content: "";
         }
         &.minesweeper-is-open.minesweeper-is-landmine {
           &::after {
-            content: '';
+            content: "";
           }
         }
         &.minesweeper-is-open:not(.minesweeper-is-landmine) {
           &::after {
             position: absolute;
-            content: '\\';
+            content: "\\";
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
           }
+        }
+      }
+
+      svg {
+        width: 80%;
+        height: 80%;
+        .flag-border {
+          fill: $color-0
+        }
+        .flag-bg {
+          fill: $num-color-a
+        }
+        .landmine-border {
+          fill: $color-3
+        }
+        .landmine-bg {
+          fill: $color-1
         }
       }
     }

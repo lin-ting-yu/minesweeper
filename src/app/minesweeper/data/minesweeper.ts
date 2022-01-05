@@ -117,7 +117,10 @@ export class Minesweeper {
     Minesweeper.nearVectorList.forEach((nearVector) => {
       const x = land.position.x + nearVector.x;
       const y = land.position.y + nearVector.y;
-      if (filter && (x < 0 || y < 0 || x >= this.width || y >= this.height)) {
+      if (x < 0 || y < 0 || x >= this.width || y >= this.height) {
+        if (!filter) {
+          result.push(null);
+        }
         return;
       }
       const innerLand = this.getLandByPos(x, y);
@@ -370,7 +373,11 @@ export class Minesweeper {
     }
     if (land && !land.isOpen) {
       land.setIsFlag(!land.isFlag);
-      this._flagLangth += +land.isFlag;
+      if (land.isFlag) {
+        this._flagLangth += 1;
+      } else {
+        this._flagLangth -= 1;
+      }
     }
   }
 
