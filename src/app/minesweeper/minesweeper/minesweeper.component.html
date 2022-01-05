@@ -1,0 +1,195 @@
+<div class="minesweeper-header">
+  <div class="minesweeper-icon"></div>
+  <div class="minesweeper-icon"></div>
+</div>
+<div
+  class="minesweeper-body"
+  [ngClass]="{
+    'minesweeper-is-done': isDone || isDead
+  }"
+>
+  <div class="minesweeper-dash">
+    <div class="minesweeper-number" [attr.data-content]="landmineNum"></div>
+    <div class="minesweeper-face" (click)="restart()">
+    <svg
+      version="1.1" xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+      width="100px" height="100px" viewBox="0 0 100 100"
+      style="enable-background:new 0 0 100 100;" xml:space="preserve"
+    >
+      <ng-container *ngIf="!isDone && !isDead && !isLeftDown">
+        <rect x="82.35" y="82.35" width="5.881" height="5.881"/>
+        <rect x="82.35" y="11.77" width="5.881" height="5.88"/>
+        <rect x="70.58" y="88.23" width="11.77" height="5.89"/>
+        <rect x="70.58" y="5.88" width="11.77" height="5.89"/>
+        <rect x="64.7" y="61.143" width="5.88" height="11.771"/>
+        <polygon points="5.88,29.42 0,29.42 0,70.58 5.88,70.58 5.88,82.35 11.76,82.35 11.76,70.579 5.88,70.579 5.88,29.42
+          11.76,29.42 11.76,17.65 5.88,17.65 	"/>
+        <rect x="29.42" y="94.12" width="41.16" height="5.88"/>
+        <rect x="35.3" y="72.914" width="29.4" height="5.879"/>
+        <rect x="29.42" width="41.16" height="5.88"/>
+        <rect x="29.42" y="61.143" width="5.88" height="11.771"/>
+        <rect x="17.65" y="88.23" width="11.77" height="5.89"/>
+        <rect x="17.65" y="5.88" width="11.77" height="5.89"/>
+        <rect x="11.77" y="82.35" width="5.88" height="5.881"/>
+        <rect x="11.77" y="11.77" width="5.88" height="5.88"/>
+        <polygon points="94.12,29.42 94.12,17.65 88.24,17.65 88.24,29.42 94.12,29.42 94.12,70.579 88.24,70.579 88.24,82.35
+          94.12,82.35 94.12,70.58 100,70.58 100,29.42 	"/>
+        <rect x="64.7" y="31.753" width="11.76" height="17.65"/>
+        <rect x="23.54" y="31.753" width="11.76" height="17.65"/>
+      </ng-container>
+      <ng-container *ngIf="isDead">
+        <rect x="32.355" y="62.31" width="5.89" height="17.65"/>
+        <rect x="61.756" y="62.31" width="5.889" height="17.65"/>
+        <rect x="38.245" y="56.43" width="23.511" height="5.88"/>
+        <rect x="38.245" y="79.97" width="23.511" height="5.88"/>
+        <polygon points="82.35,37.925 73.524,37.925 73.524,29.1 67.635,29.1 67.635,37.925 58.81,37.925 58.81,43.815
+          67.635,43.815 67.635,52.64 73.524,52.64 73.524,43.815 82.35,43.815 	"/>
+        <polygon points="32.365,29.1 26.475,29.1 26.475,37.925 17.65,37.925 17.65,43.815 26.475,43.815 26.475,52.64
+          32.365,52.64 32.365,43.815 41.19,43.815 41.19,37.925 32.365,37.925 	"/>
+        <rect x="82.35" y="82.35" width="5.881" height="5.881"/>
+        <rect x="82.35" y="11.77" width="5.881" height="5.88"/>
+        <rect x="70.58" y="88.23" width="11.77" height="5.89"/>
+        <rect x="70.58" y="5.88" width="11.77" height="5.89"/>
+        <polygon points="5.88,29.42 0,29.42 0,70.58 5.88,70.58 5.88,82.35 11.76,82.35 11.76,70.579 5.88,70.579 5.88,29.42
+          11.76,29.42 11.76,17.65 5.88,17.65 	"/>
+        <rect x="29.42" y="94.12" width="41.16" height="5.88"/>
+        <rect x="29.42" width="41.16" height="5.88"/>
+        <rect x="17.65" y="88.23" width="11.77" height="5.89"/>
+        <rect x="17.65" y="5.88" width="11.77" height="5.89"/>
+        <rect x="11.77" y="82.35" width="5.88" height="5.881"/>
+        <rect x="11.77" y="11.77" width="5.88" height="5.88"/>
+        <polygon points="94.12,29.42 94.12,17.65 88.24,17.65 88.24,29.42 94.12,29.42 94.12,70.579 88.24,70.579 88.24,82.35
+          94.12,82.35 94.12,70.58 100,70.58 100,29.42 	"/>
+      </ng-container>
+      <ng-container *ngIf="isDone && !isDead">
+        <rect x="76.46" y="35.3" width="5.89" height="11.77"/>
+        <rect x="64.7" y="29.42" width="11.76" height="5.88"/>
+        <rect x="58.81" y="35.3" width="5.891" height="11.77"/>
+        <rect x="61.75" y="70.58" width="5.891" height="5.88"/>
+        <polygon points="26.48,52.93 26.48,70.58 32.36,70.58 32.36,58.81 67.641,58.81 67.641,70.58 73.52,70.58 73.52,52.93
+            "/>
+        <polygon points="61.76,82.35 61.76,76.47 38.25,76.46 38.25,82.35 	"/>
+        <rect x="32.36" y="70.58" width="5.89" height="5.88"/>
+        <rect x="35.3" y="35.3" width="5.89" height="11.77"/>
+        <rect x="23.54" y="29.42" width="11.76" height="5.88"/>
+        <rect x="17.65" y="35.3" width="5.89" height="11.77"/>
+        <rect x="82.35" y="82.35" width="5.881" height="5.881"/>
+        <rect x="82.35" y="11.77" width="5.881" height="5.88"/>
+        <rect x="70.58" y="88.23" width="11.77" height="5.89"/>
+        <rect x="70.58" y="5.88" width="11.77" height="5.89"/>
+        <polygon points="5.88,29.42 0,29.42 0,70.58 5.88,70.58 5.88,82.35 11.76,82.35 11.76,70.579 5.88,70.579 5.88,29.42
+          11.76,29.42 11.76,17.65 5.88,17.65 	"/>
+        <rect x="29.42" y="94.12" width="41.16" height="5.88"/>
+        <rect x="29.42" width="41.16" height="5.88"/>
+        <rect x="17.65" y="88.23" width="11.77" height="5.89"/>
+        <rect x="17.65" y="5.88" width="11.77" height="5.89"/>
+        <rect x="11.77" y="82.35" width="5.88" height="5.881"/>
+        <rect x="11.77" y="11.77" width="5.88" height="5.88"/>
+        <polygon points="94.12,29.42 94.12,17.65 88.24,17.65 88.24,29.42 94.12,29.42 94.12,70.579 88.24,70.579 88.24,82.35
+          94.12,82.35 94.12,70.58 100,70.58 100,29.42 	"/>
+      </ng-container>
+      <ng-container *ngIf="isLeftDown">
+        <rect x="21.175" y="58.814" width="5.89" height="5.881"/>
+        <rect x="27.065" y="52.955" width="5.88" height="5.859"/>
+        <rect x="32.945" y="47.075" width="5.88" height="5.88"/>
+        <rect x="27.065" y="41.185" width="5.88" height="5.89"/>
+        <rect x="21.175" y="35.305" width="5.89" height="5.88"/>
+        <rect x="73.46" y="58.814" width="5.89" height="5.881"/>
+        <rect x="67.58" y="52.955" width="5.88" height="5.859"/>
+        <rect x="61.7" y="47.075" width="5.88" height="5.88"/>
+        <rect x="67.58" y="41.185" width="5.88" height="5.89"/>
+        <rect x="73.46" y="35.305" width="5.89" height="5.88"/>
+        <rect x="32.36" y="70.45" width="35.281" height="5.88"/>
+        <rect x="82.35" y="82.35" width="5.881" height="5.881"/>
+        <rect x="82.35" y="11.77" width="5.881" height="5.88"/>
+        <rect x="70.58" y="88.23" width="11.77" height="5.89"/>
+        <rect x="70.58" y="5.88" width="11.77" height="5.89"/>
+        <polygon points="5.88,29.42 0,29.42 0,70.58 5.88,70.58 5.88,82.35 11.76,82.35 11.76,70.579 5.88,70.579 5.88,29.42
+          11.76,29.42 11.76,17.65 5.88,17.65 	"/>
+        <rect x="29.42" y="94.12" width="41.16" height="5.88"/>
+        <rect x="29.42" width="41.16" height="5.88"/>
+        <rect x="17.65" y="88.23" width="11.77" height="5.89"/>
+        <rect x="17.65" y="5.88" width="11.77" height="5.89"/>
+        <rect x="11.77" y="82.35" width="5.88" height="5.881"/>
+        <rect x="11.77" y="11.77" width="5.88" height="5.88"/>
+        <polygon points="94.12,29.42 94.12,17.65 88.24,17.65 88.24,29.42 94.12,29.42 94.12,70.579 88.24,70.579 88.24,82.35
+          94.12,82.35 94.12,70.58 100,70.58 100,29.42 	"/>
+      </ng-container>
+      </svg>
+    </div>
+    <div class="minesweeper-number" [attr.data-content]="time"></div>
+  </div>
+  <div class="minesweeper-lands">
+    <!-- <div class="row">
+      <div class="col is-open" data-content="1" ></div>
+      <div class="col is-open" data-content="2" ></div>
+      <div class="col is-open" data-content="3" ></div>
+      <div class="col is-open" data-content="4" ></div>
+      <div class="col is-open" data-content="5" ></div>
+      <div class="col is-open" data-content="6" ></div>
+      <div class="col is-open" data-content="7" ></div>
+      <div class="col is-open" data-content="8" ></div>
+    </div> -->
+    <!-- <div class="row">
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>
+      <div>4</div>
+      <div>5</div>
+      <div>6</div>
+      <div>7</div>
+      <div>8</div>
+    </div> -->
+    <div
+      *ngFor="let _y of minesweeperData.height; let yIndex = index;"
+      class="minesweeper-row"
+    >
+      <ng-container *ngFor="let _x of minesweeperData.width; let xIndex = index;">
+        <ng-container *ngTemplateOutlet="
+          land;
+          context: {
+            land: getLand(xIndex, yIndex),
+            index: xyToI(xIndex, yIndex),
+            x: xIndex,
+            y: yIndex
+          }
+        "></ng-container>
+
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+
+<ng-template
+  #land
+  let-land="land"
+  let-x="x"
+  let-y="y"
+  let-index="index"
+>
+  <div
+    class="minesweeper-col"
+    [attr.data-content]="
+      (land && land.isOpen && !land.isLandmine)
+        ? (
+          land && land.isOpen
+            ? (land.nearLandmineLength ? land.nearLandmineLength : '')
+            : ''
+        )
+        : ''
+    "
+    [ngClass]="{
+      'minesweeper-is-open': land.isOpen,
+      'minesweeper-is-landmine': land.isOpen && land.isLandmine,
+      'minesweeper-is-flag': land.isFlag,
+      'minesweeper-is-down': checkDown(x, y)
+    }"
+    (mousedown)="mousedown(x, y, $event)"
+    (mouseup)="mouseup(x, y, $event)"
+    (mouseenter)="mouseenter(x, y)"
+    (click)="itemClick(x, y, $event)"
+    (contextmenu)="false"
+  ></div>
+</ng-template>
