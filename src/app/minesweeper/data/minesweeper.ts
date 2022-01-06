@@ -364,6 +364,37 @@ export class Minesweeper {
       });
   }
 
+  openAllLandmineAngWorngFlag(
+    resolve?: (res: {
+      type: OpenLandEnum;
+      openLandList: Land[];
+      isDone: boolean;
+    }) => void
+  ): void {
+    const openLandList: Land[] = [];
+    let hasLandmine = false;
+    this.landMatrix.forEach((land) => {
+      if (!land || land.isOpen) {
+        return;
+      }
+      if (land.isLandmine || (land.isFlag && !land.isLandmine)) {
+        land.setIsOpen(true);
+        openLandList.push(land);
+        if (land.isLandmine) {
+          hasLandmine = land.isLandmine;
+        } else {
+          this.openSaveLandLangth++;
+        }
+      }
+    });
+    resolve &&
+      resolve({
+        type: hasLandmine ? OpenLandEnum.IsLandmine : OpenLandEnum.IsOpened,
+        openLandList,
+        isDone: this.isDone,
+      });
+  }
+
   setFlag(x_index: number, y?: number): void {
     let land: Land | null;
     if (typeof x_index === 'number' && typeof y === 'number') {

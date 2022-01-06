@@ -135,7 +135,7 @@ export class MinesweeperComponent implements OnInit, OnChanges {
 
         if (res.type === OpenLandEnum.IsLandmine) {
           this.isDead = true;
-          this.minesweeper.openAll();
+          this.minesweeper.openAllLandmineAngWorngFlag();
         }
         this.setIsDone(res.isDone);
       });
@@ -193,7 +193,7 @@ export class MinesweeperComponent implements OnInit, OnChanges {
         this.minesweeper.openNearLand(x, y, (res) => {
           if (res.type === OpenLandEnum.IsLandmine) {
             this.isDead = true;
-            this.minesweeper.openAll();
+            this.minesweeper.openAllLandmineAngWorngFlag();
           }
           this.setIsDone(res.isDone);
         });
