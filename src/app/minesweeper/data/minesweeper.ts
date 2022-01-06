@@ -76,8 +76,9 @@ export class Minesweeper {
   private createLandmineIndexData(): { [num: number]: boolean } {
     let length = 0;
     const json: { [num: number]: boolean } = {};
+    const max = this.width * this.height;
     while (length < this.landmineLength) {
-      const k = Math.round(Math.random() * this.width * this.height);
+      const k = ~~(Math.random() * max);
       if (!json[k] && !this.ignoreIndexData[k]) {
         json[k] = true;
         length++;
