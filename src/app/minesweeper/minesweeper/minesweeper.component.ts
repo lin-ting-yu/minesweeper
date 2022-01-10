@@ -5,11 +5,12 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { Land, Minesweeper, OpenLandEnum } from '../data/minesweeper';
+import { Land, Minesweeper, OpenLandEnum } from '../core/minesweeper';
 
 enum Level {
   Easy = 'Easy',
@@ -43,7 +44,7 @@ const mouseupIntervalTime = 30
   styleUrls: ['./minesweeper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MinesweeperComponent implements OnInit, OnChanges {
+export class MinesweeperComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private cdRef: ChangeDetectorRef
   ) { }
@@ -116,6 +117,10 @@ export class MinesweeperComponent implements OnInit, OnChanges {
         this.innerLevel = this.level || Level.Easy;
         this.init();
       }
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.interval);
   }
 
   itemClick(x: number, y: number, event: MouseEvent | PointerEvent): void {
